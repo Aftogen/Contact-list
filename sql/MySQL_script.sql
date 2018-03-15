@@ -6,5 +6,6 @@ CREATE TABLE `contact` (
   `email` varchar(45) NOT NULL,
   `address` varchar(45) NOT NULL,
   `telephone` varchar(45) NOT NULL,
+  `nickname` varchar(45),
   PRIMARY KEY (`contact_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=25 DEFAULT CHARSET=utf8
