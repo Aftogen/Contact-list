@@ -16,6 +16,7 @@ public class Contact {
 		this.email = email;
 		this.address = address;
 		this.telephone = telephone;
+		this.nickname = nickname;
 	}
 
 	public int getId() {
@@ -57,5 +58,10 @@ public class Contact {
 	public void setTelephone(String telephone) {
 		this.telephone = telephone;
 	}
-
+	
+	public String getNickname() {
+		return nickname;
+	}
+	
+	
 }
