@@ -1,1 +1,3 @@
-asfwefjewrbnglkje
+
+public class MockDao{
+}
