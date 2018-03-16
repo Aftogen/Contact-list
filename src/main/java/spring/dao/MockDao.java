@@ -1,4 +1,4 @@
 
 public class MockDao{
-	public Integer test;
+	public String test;
 }
