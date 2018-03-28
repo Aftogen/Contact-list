@@ -1,0 +1,84 @@
+package task;
+
+import java.util.*;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+
+public class App {
+    public static void main(String[] args) {
+
+        Collection<User> left = new HashSet<>();
+
+        for (int i = 0; i < 1_000_000; i++) {
+            left.add(new User("user" + i, "pass" + i));
+        }
+
+        Collection<User> right = new HashSet<>();
+
+        for (int i = 0; i < 20; i++) {
+            right.add(new User("user" + i, "pass" + i));
+        }
+
+        long startTime = System.currentTimeMillis();
+
+        Collection<User> duplicateUsers = findDuplicates(left, right);
+
+        long resultTime = System.currentTimeMillis() - startTime;
+
+        System.out.println("Time ti find duplicates in millis: " + resultTime);
+
+        System.out.println("Duplicates: ");
+
+        for (User duplicateUser : duplicateUsers) {
+            System.out.println(duplicateUser);
+        }
+
+
+    }
+
+    public static Collection<User> findDuplicates(Collection<User> left, Collection<User> right) {
+
+
+        Collection<User> collection = right
+                .stream()
+
+
+
+                .collect(Collectors.toSet());
+
+
+        return null;
+    }
+
+
+}
+
+
+
+package task;
+
+public final class User {
+    private String name;
+    private String password;
+
+    public User(String name, String password) {
+        this.name = name;
+        this.password = password;
+    }
+
+    public final String getName() {
+        return name;
+    }
+
+    public final String getPassword() {
+        return password;
+    }
+
+    @Override
+    public String toString() {
+        return "User{" +
+                "name='" + name + '\'' +
+                ", password='" + password + '\'' +
+                '}';
+    }
+}
