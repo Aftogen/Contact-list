@@ -1,84 +1,121 @@
-package task;
+group 'javaschool'
+version '1.0-SNAPSHOT'
 
-import java.util.*;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
+apply plugin: 'java'
+apply plugin: 'war'
+apply plugin: 'com.bmuschko.tomcat'
 
-public class App {
-    public static void main(String[] args) {
+sourceCompatibility = 1.8
 
-        Collection<User> left = new HashSet<>();
+repositories {
+    mavenCentral()
+}
 
-        for (int i = 0; i < 1_000_000; i++) {
-            left.add(new User("user" + i, "pass" + i));
-        }
+tomcatRun {
+    httpPort = 8080
+    contextPath = "/"
+}
 
-        Collection<User> right = new HashSet<>();
+dependencies {
 
-        for (int i = 0; i < 20; i++) {
-            right.add(new User("user" + i, "pass" + i));
-        }
+    //Tomcat
+    def tomcatVersion = '7.0.59'
 
-        long startTime = System.currentTimeMillis();
+    tomcat "org.apache.tomcat.embed:tomcat-embed-core:${tomcatVersion}",
+            "org.apache.tomcat.embed:tomcat-embed-logging-juli:${tomcatVersion}",
+            "org.apache.tomcat.embed:tomcat-embed-jasper:${tomcatVersion}"
 
-        Collection<User> duplicateUsers = findDuplicates(left, right);
+    //Test
+    testCompile "org.testng:testng:6.11"
 
-        long resultTime = System.currentTimeMillis() - startTime;
+    //Spring
+    compile group: 'org.springframework', name: 'spring-jdbc', version: '4.3.14.RELEASE'
+    compile group: 'org.springframework', name: 'spring-context', version: '4.3.14.RELEASE'
+    compile group: 'org.springframework', name: 'spring-orm', version: '4.3.14.RELEASE'
+    compile group: 'org.springframework', name: 'spring-webmvc', version: '4.3.14.RELEASE'
 
-        System.out.println("Time ti find duplicates in millis: " + resultTime);
+    // CGLib
+    compile group: 'cglib', name: 'cglib-nodep', version: '3.1'
 
-        System.out.println("Duplicates: ");
+    // h2
+    testCompile group: 'com.h2database', name: 'h2', version: '1.4.196'
 
-        for (User duplicateUser : duplicateUsers) {
-            System.out.println(duplicateUser);
-        }
+    //Javax
+    compileOnly group: 'javax.servlet', name: 'javax.servlet-api', version: '3.1.0'
+    compileOnly group: 'javax.servlet.jsp', name: 'jsp-api', version: '2.2'
 
-
-    }
-
-    public static Collection<User> findDuplicates(Collection<User> left, Collection<User> right) {
-
-
-        Collection<User> collection = right
-                .stream()
-
-
-
-                .collect(Collectors.toSet());
-
-
-        return null;
-    }
-
+    //JSP
+    compile group: 'javax.servlet', name: 'jstl', version: '1.2'
 
 }
 
+test {
+    useTestNG();
+}
 
 
-package task;
+buildscript {
 
-public final class User {
-    private String name;
-    private String password;
+    repositories {
+        maven {
+            url 'https://artifactory.raiffeisen.ru/artifactory/ccc-virtual-mvn'
+            credentials {
+                username = "${artifactory_user}"
+                password = "${artifactory_password}"
+            }
+        }
 
-    public User(String name, String password) {
-        this.name = name;
-        this.password = password;
+        maven {
+            url 'https://artifactory.raiffeisen.ru/artifactory/ccc-snapshot-mvn'
+            credentials {
+                username = "${artifactory_user}"
+                password = "${artifactory_password}"
+            }
+        }
+
+        maven {
+            url 'https://artifactory.raiffeisen.ru/artifactory/repo1'
+            credentials {
+                username = "${artifactory_user}"
+                password = "${artifactory_password}"
+            }
+        }
+
+        maven {
+            url 'https://artifactory.raiffeisen.ru/artifactory/jcenter'
+            credentials {
+                username = "${artifactory_user}"
+                password = "${artifactory_password}"
+            }
+        }
+
+        maven {
+            url 'https://artifactory.raiffeisen.ru/artifactory/rc-ext-release'
+            credentials {
+                username = "${artifactory_user}"
+                password = "${artifactory_password}"
+            }
+        }
+
+        maven {
+            url 'https://artifactory.raiffeisen.ru/artifactory/rc-libs-release'
+            credentials {
+                username = "${artifactory_user}"
+                password = "${artifactory_password}"
+            }
+        }
+
+        maven {
+            url 'https://artifactory.raiffeisen.ru/artifactory/rc-libs-snapshot'
+            credentials {
+                username = "${artifactory_user}"
+                password = "${artifactory_password}"
+            }
+        }
+        mavenLocal()
     }
 
-    public final String getName() {
-        return name;
-    }
-
-    public final String getPassword() {
-        return password;
-    }
-
-    @Override
-    public String toString() {
-        return "User{" +
-                "name='" + name + '\'' +
-                ", password='" + password + '\'' +
-                '}';
+    dependencies {
+        classpath 'com.bmuschko:gradle-tomcat-plugin:2.2.2'
     }
 }
